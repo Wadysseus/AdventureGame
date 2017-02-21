@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game.Core", "Game.Core.csproj", "{FC288147-6497-4C3A-81E6-339E645270BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game.Core", ".\Game.Core\Game.Core.csproj", "{FC288147-6497-4C3A-81E6-339E645270BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game.Core.Test", "..\Game.Core.Test\Game.Core.Test.csproj", "{722E92F9-42D6-467A-A549-67FE67FB3655}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game.Core.Test", ".\Game.Core.Test\Game.Core.Test.csproj", "{722E92F9-42D6-467A-A549-67FE67FB3655}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

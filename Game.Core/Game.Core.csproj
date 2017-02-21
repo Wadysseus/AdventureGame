@@ -30,10 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=4.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>packages\Autofac.4.3.0\lib\net45\Autofac.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,10 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Input\InputParsingService.cs" />
+    <Compile Include="Input\ParseInputFailed.cs" />
+    <Compile Include="Messaging\Cache.cs" />
+    <Compile Include="Messaging\CannotRegisterType.cs" />
+    <Compile Include="Messaging\ListenerMethodInfo.cs" />
+    <Compile Include="Messaging\Message.cs" />
+    <Compile Include="Messaging\MessageHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Game.Core.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,6 +16,12 @@ namespace AdventureGame.Input
   {
     private Dictionary<string, Action<string[]>> Actions = new Dictionary<string, Action<string[]>>();
     private static char[] separatingCharacters = { ' ' };
+    private IMessageHub _hub;
+
+    public InputParsingService(IMessageHub hub)
+    {
+      _hub = hub;
+    }
 
     public IEnumerable<string> GetCommandWords()
     {
