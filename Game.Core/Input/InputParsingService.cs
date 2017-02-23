@@ -5,48 +5,57 @@ using System.Linq;
 
 namespace AdventureGame.Input
 {
-  public interface IInputParsingService
-  {
-    void Parse(string input);
-    void RegisterCommand(string[] commandWords, Action<string[]> callback);
-    IEnumerable<string> GetCommandWords();
-  }
-
-  public class InputParsingService : IInputParsingService
-  {
-    private Dictionary<string, Action<string[]>> Actions = new Dictionary<string, Action<string[]>>();
-    private static char[] separatingCharacters = { ' ' };
-    private IMessageHub _hub;
-
-    public InputParsingService(IMessageHub hub)
+    public interface IInputParsingService
     {
-      _hub = hub;
+        void Parse(string input);
+        void RegisterCommand(string[] commandWords, Action<string[]> callback);
+        IEnumerable<string> GetCommandWords();
     }
 
-    public IEnumerable<string> GetCommandWords()
+    public class InputParsingService : IInputParsingService
     {
-      return Actions.Keys;
-    }
+        private Dictionary<string, Action<string[]>> Actions = new Dictionary<string, Action<string[]>>();
+        private static char[] separatingCharacters = { ' ' };
+        private IMessageHub _hub;
 
-    public void Parse(string input)
-    {
-      string[] inputTokens = input.Split(separatingCharacters);
-      var currentAction = Actions[inputTokens.First()];
-      currentAction(inputTokens.Skip(1).ToArray());
-    }
+        public InputParsingService(IMessageHub hub)
+        {
+            _hub = hub;
+        }
 
-    public void RegisterCommand(string[] commandWords, Action<string[]> callback)
-    {
-      if (IsAnyWordAlreadyRegistered(commandWords))
-        throw new ArgumentException("Duplicate commandWord already registered in Actions.");
+        public IEnumerable<string> GetCommandWords()
+        {
+            return Actions.Keys;
+        }
 
-      foreach(var word in commandWords)
-        Actions.Add(word, callback);
-    }
+        public void Parse(string input)
+        {
+            string[] inputTokens = input.Split(separatingCharacters);
+            string actionName = inputTokens.First();
 
-    private bool IsAnyWordAlreadyRegistered(string[] commandWords)
-    {
-      return GetCommandWords().Any(word => commandWords.Any(x => x == word));
+            if (Actions.ContainsKey(actionName))
+            {
+                var currentAction = Actions[actionName];
+                currentAction(inputTokens.Skip(1).ToArray());
+            }
+            else
+            {
+                _hub.Send(new ParseInputFailed(actionName));
+            }
+        }
+
+        public void RegisterCommand(string[] commandWords, Action<string[]> callback)
+        {
+            if (IsAnyWordAlreadyRegistered(commandWords))
+                throw new ArgumentException("Duplicate commandWord already registered in Actions.");
+
+            foreach (var word in commandWords)
+                Actions.Add(word, callback);
+        }
+
+        private bool IsAnyWordAlreadyRegistered(string[] commandWords)
+        {
+            return GetCommandWords().Any(word => commandWords.Any(x => x == word));
+        }
     }
-  }
 }

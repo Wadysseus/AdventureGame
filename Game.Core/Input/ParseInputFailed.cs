@@ -6,9 +6,9 @@ namespace AdventureGame.Input
   {
     public string Message { get; private set; }
 
-    public ParseInputFailed(string failedComandWord)
+    public ParseInputFailed(string failedCommandWord)
     {
-      Message = $"{failedComandWord} is not a valid command.";
+      Message = $"{failedCommandWord} is not a valid command.";
     }
   }
 }
