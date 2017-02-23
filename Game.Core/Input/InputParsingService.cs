@@ -39,7 +39,9 @@ namespace AdventureGame.Input
                 currentAction(inputTokens.Skip(1).ToArray());
             }
             else
+            {
                 _hub.Send(new ParseInputFailed(actionName));
+            }
         }
 
         public void RegisterCommand(string[] commandWords, Action<string[]> callback)
