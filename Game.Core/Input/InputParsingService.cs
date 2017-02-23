@@ -38,7 +38,7 @@ namespace AdventureGame.Input
                 var currentAction = Actions[actionName];
                 currentAction(inputTokens.Skip(1).ToArray());
             }
-            else  //Use ParseInputFailed with the message accepting `actionName` as an arg
+            else
                 _hub.Send(new ParseInputFailed(actionName));
         }
 
