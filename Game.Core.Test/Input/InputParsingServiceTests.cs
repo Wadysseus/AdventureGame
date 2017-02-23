@@ -15,9 +15,11 @@ namespace Game.Core.Test.Input
 
     private int _callbackCount;
     private string[] _testCommandWords = { "a", "b", "barf" };
+    private string[] _argsPassed;
     private void TestAction(string[] actionWords)
     {
       ++_callbackCount;
+      _argsPassed = actionWords;
     }
 
     [TestInitialize]
@@ -26,15 +28,13 @@ namespace Game.Core.Test.Input
       _mockMessageHub = new Mock<IMessageHub>();
       _service = new InputParsingService(_mockMessageHub.Object);
       _callbackCount = 0;
+      _argsPassed = new string[] { };
     }
 
     [TestMethod]
     public void RegisterCommand_RegistersAllCommandWords()
     {
-      //Arrange
-      //Act
       _service.RegisterCommand(_testCommandWords, TestAction);
-      //Assert
       var result = _service.GetCommandWords();
 
       var matchCount = result
@@ -46,12 +46,10 @@ namespace Game.Core.Test.Input
 
     [TestMethod]
     [ExpectedException(typeof(ArgumentException))]
-    public void RegisterCommand_CannotRegisterCommandWordMoreThanOnce()
+    public void RegisterCommand_ThrowsException_WhenWordAlreadyRegistered()
     {
-      //Arrange
       string[] _duplicatedWord = { _testCommandWords.First() };
 
-      //Act
       _service.RegisterCommand(_testCommandWords, TestAction);
       _service.RegisterCommand(_duplicatedWord, TestAction);
     }
@@ -68,10 +66,33 @@ namespace Game.Core.Test.Input
     }
 
     [TestMethod]
-    public void Parse_WhenNoMatchingCommandWord_SendsParseInputFailedMessage()
+    public void Parse_SendsParseInputFailedMessage_WhenNoMatchingCommandWord()
     {
-      _service.Parse("nomatch");
-      _mockMessageHub.Verify(x => x.Send(It.IsAny<ParseInputFailed>()));
+      _mockMessageHub.Verify(mockHub => mockHub.Send(It.IsAny<ParseInputFailed>()));
+    }
+
+    [TestMethod]
+    public void Parse_TokenizesAndPassesArgsToAction_WhenMultipleWordInput()
+    {
+      string secondWord = "second";
+      string thirdWord = "third";
+      string input = $"{_testCommandWords.First()} {secondWord} {thirdWord}";
+      _service.RegisterCommand(_testCommandWords, TestAction);
+
+      _service.Parse(input);
+      Assert.IsTrue(_argsPassed.First() == secondWord && _argsPassed.Skip(1).First() == thirdWord);
+    }
+
+    [TestMethod]
+    public void Parse_DoesNothing_WithNullInput()
+    {
+      _service.Parse(null);
+    }
+
+    [TestMethod]
+    public void Parse_DoesNothing_WithEmptyInput()
+    {
+      _service.Parse(string.Empty);
     }
   }
 }

@@ -34,14 +34,9 @@ namespace AdventureGame.Input
             string actionName = inputTokens.First();
 
             if (Actions.ContainsKey(actionName))
-            {
-                var currentAction = Actions[actionName];
-                currentAction(inputTokens.Skip(1).ToArray());
-            }
+                Actions[actionName](inputTokens.Skip(1).ToArray());
             else
-            {
                 _hub.Send(new ParseInputFailed(actionName));
-            }
         }
 
         public void RegisterCommand(string[] commandWords, Action<string[]> callback)
