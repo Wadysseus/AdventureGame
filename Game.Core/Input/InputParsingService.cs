@@ -30,8 +30,14 @@ namespace AdventureGame.Input
 
         public void Parse(string input)
         {
+            if (string.IsNullOrEmpty(input))
+            {
+                return;
+            }
+            
             string[] inputTokens = input.Split(separatingCharacters);
             string actionName = inputTokens.First();
+            
 
             if (Actions.ContainsKey(actionName))
                 Actions[actionName](inputTokens.Skip(1).ToArray());

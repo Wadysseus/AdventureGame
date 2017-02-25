@@ -68,7 +68,8 @@ namespace Game.Core.Test.Input
     [TestMethod]
     public void Parse_SendsParseInputFailedMessage_WhenNoMatchingCommandWord()
     {
-      _mockMessageHub.Verify(mockHub => mockHub.Send(It.IsAny<ParseInputFailed>()));
+        _service.Parse("nomatch");
+        _mockMessageHub.Verify(mockHub => mockHub.Send(It.IsAny<ParseInputFailed>()));
     }
 
     [TestMethod]
